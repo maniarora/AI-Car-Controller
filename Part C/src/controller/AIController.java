@@ -1,8 +1,12 @@
 package controller;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 import tiles.MapTile;
+import tiles.TrapTile;
+import tiles.LavaTrap;
 import utilities.Coordinate;
 import world.Car;
 import world.WorldSpatial;
@@ -37,6 +41,16 @@ public class AIController extends CarController {
 		// Gets what the car can see
 		HashMap<Coordinate, MapTile> currentView = getView();
 		
+		for (Coordinate name: currentView.keySet()){
+			
+			MapTile value = currentView.get(name);
+            if (value.getType().equals(MapTile.Type.TRAP) && ((TrapTile) value).getTrap().equals("lava")){
+            	int keyVal = ((LavaTrap) value).getKey();
+            	if (keyVal > 0)
+            		System.out.println("Key: " + keyVal + " Found at: " + name.x+ "," + name.y);
+            	
+            }
+        }
 		checkStateChange();
 
 		// If you are not following a wall initially, find a wall to stick to!

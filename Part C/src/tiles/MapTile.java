@@ -24,4 +24,5 @@ public class MapTile {
 	public Boolean isType(Type tileType) {
 		return this.tileType == tileType;
 	}
+
 }

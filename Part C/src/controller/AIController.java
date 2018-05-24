@@ -1,10 +1,8 @@
 package controller;
 
-import java.util.*;
+import java.util.HashMap;
 
 import tiles.MapTile;
-import tiles.LavaTrap;
-import tiles.TrapTile;
 import utilities.Coordinate;
 import world.Car;
 import world.WorldSpatial;
@@ -13,6 +11,7 @@ public class AIController extends CarController {
 	
 	// How many minimum units the wall is away from the player.
 	private int wallSensitivity = 2;
+	
 	
 	private boolean isFollowingWall = false; // This is initialized when the car sticks to a wall.
 	private WorldSpatial.RelativeDirection lastTurnDirection = null; // Shows the last turn direction the car takes.
@@ -26,8 +25,6 @@ public class AIController extends CarController {
 	// Offset used to differentiate between 0 and 360 degrees
 	private int EAST_THRESHOLD = 3;
 	
-	private HashMap<Coordinate, Integer> keyLocs = new HashMap<>();
-	
 	public AIController(Car car) {
 		super(car);
 	}
@@ -39,25 +36,6 @@ public class AIController extends CarController {
 		
 		// Gets what the car can see
 		HashMap<Coordinate, MapTile> currentView = getView();
-		
-		for (Coordinate name: currentView.keySet()){ 
-		       
-			MapTile value = currentView.get(name); 
-		    if (value.getType().equals(MapTile.Type.TRAP) && ((TrapTile) value).getTrap().equals("lava")){ 
-		    	int keyVal = ((LavaTrap) value).getKey(); 
-		        if (keyVal > 0) 
-		            System.out.println("Key: " + keyVal + " Found at: " + name.x+ "," + name.y); 
-		        	if(!keyLocs.containsKey(name) && keyVal!=0) {
-		        		keyLocs.put(name,keyVal);
-		        	}
-		        	if(keyLocs.size() == 3) {
-		        		this.applyBrake();
-		        	}
-		    }
-		    
-		} 
-		System.out.println(keyLocs.entrySet());
-
 		
 		checkStateChange();
 
@@ -120,9 +98,6 @@ public class AIController extends CarController {
 				isTurningLeft = true;
 			}
 		}
-		
-		
-
 	}
 	
 	/**

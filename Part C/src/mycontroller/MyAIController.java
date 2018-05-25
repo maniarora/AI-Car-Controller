@@ -38,11 +38,14 @@ public class MyAIController extends CarController{
 		
 		private boolean hasTraversed;
 		
+		private final Coordinate homePosn;
+		
 		public MyAIController(Car car) {
 			super(car);
 			this.TOTAL_KEYS = car.getKey();
 			navigator = new Navigator(this, null, false, this.getHealth(), 0);
 			this.hasTraversed = false;
+			this.homePosn = new Coordinate(this.getPosition());
 		}
 		
 		Coordinate initialGuess;
@@ -55,6 +58,8 @@ public class MyAIController extends CarController{
 			// Gets what the car can see
 			HashMap<Coordinate, MapTile> currentView = getView();
 			ArrayList<Coordinate> keyCoordinates = new ArrayList<>();
+			ArrayList<Coordinate> homeCoor = new ArrayList<>();
+			homeCoor.add(homePosn);
 			keyCoordinates.add(new Coordinate("19,2"));
 			checkStateChange();
 			
@@ -63,11 +68,9 @@ public class MyAIController extends CarController{
 				keyCoordinates = keyFinder(currentView);
 			}
 			else {
-				this.applyReverseAcceleration();
-				System.out.println("Moving forward");
-				navigator.update(delta, keyCoordinates);
+				navigator.update(delta, homeCoor);
 			}
-			navigator.update(delta, keyCoordinates); 
+//			navigator.update(delta, keyCoordinates); 
 			System.out.println("FOLLOWING COORDINATES NOW ");
 		
 			

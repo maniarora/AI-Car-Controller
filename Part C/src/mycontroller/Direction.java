@@ -9,10 +9,12 @@ import world.WorldSpatial;
 
 public class Direction {
 	
+	/** An enum for forwards and backwards, since they weren't supplied. */
 	public static enum RelativeDirection{
 		FORWARD, BACKWARD, RIGHT, LEFT
 	};
 	
+	/** A HashMap where a directoin maps to a 2D int array for indexing purposes. */
     public static final HashMap<WorldSpatial.Direction, int[]> MOD_MAP = new HashMap<WorldSpatial.Direction, int[]>() {
         {
             put(WorldSpatial.Direction.EAST, new int[] { 1, 0 });
@@ -32,11 +34,23 @@ public class Direction {
         }
     };
     
+    /**
+     * Method for getting the counterclockwise orientation from the given
+     * orientation.
+     * 
+     * @return 
+     */
     public static WorldSpatial.Direction getLeftOf(Direction orientation) {
         return LEFT_OF.get(orientation);
     }
 
-    
+    /**
+     * Method for getting the clockwise orientation from the given orientation. We
+     * iterate through the leftOf map and get the key corresponding to the given
+     * value.
+     * 
+     * @return 
+     */
     public static WorldSpatial.Direction getRightOf(Direction orientation) {
         for (Entry<WorldSpatial.Direction, WorldSpatial.Direction> entry : LEFT_OF.entrySet()) {
             if (orientation.equals(entry.getValue())) {
@@ -47,6 +61,15 @@ public class Direction {
         return null;
     }
     
+    /**
+     * Given an orientation and a relative direction, return the direction either
+     * clockwise or counterclockwise of that given direction, based on the relative
+     * direction.
+     * 
+     * @param orientation
+     * @param direction
+     * @return
+     */
     public static WorldSpatial.Direction getToSideOf(Direction orientation, RelativeDirection direction) {
         if (direction == RelativeDirection.LEFT) {
             return getLeftOf(orientation);
@@ -56,16 +79,24 @@ public class Direction {
     }
     
     
-//    public static Direction getToSideOf1(Direction orientation, RelativeDirection direction) {
-//        if (direction == RelativeDirection.BACKWARD) {
-//            return getLeftOf(getLeftOf(orientation));
-//        } else {
-//            return orientation;
-//        }
-//    }
+    public static Direction getToSideOf(Direction orientation, RelativeDirection direction) {
+        if (direction == RelativeDirection.BACKWARD) {
+            return getLeftOf(getLeftOf(orientation));
+        } else {
+            return orientation;
+        }
+    }
     
     
-    
+    /**
+     * Gets the euclidian distance between two Coordinates.
+     * 
+     * @param c1
+     *            The first Coordinate
+     * @param c2
+     *            The second Coordinate
+     * @return The euclidian distance between two coordinates.
+     */
     public static float distanceBetweenCoords(Coordinate c1, Coordinate c2) {
         float xDiff = Math.abs(c1.x - c2.x);
         float yDiff = Math.abs(c1.y - c2.y);

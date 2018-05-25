@@ -22,7 +22,12 @@ public class Move {
 		this.turnDirection = turnDirection;
 	}
 	
-//	Comparing move objects for equality
+	 /**
+     * Overrides equals, used when comparing Move objects for equality
+     *
+     * @param obj The object being tested for equality
+     * @return boolean true if the object being compared is considered equal to the calling instance, false otherwise.
+     */
 	@Override
     public boolean equals(Object obj) {
         if (obj instanceof Move) {
@@ -37,7 +42,11 @@ public class Move {
         return false;
     }
 
-	
+    /**
+     * getOppositeMove returns a Move representing the opposite move to the calling move.
+     *
+     * @return a Move object representing the opposite move to the calling move.
+     */
     public Move getOppositeMove() {
     	SpeedState oppositeState = null;
         Direction.RelativeDirection oppositeDirection = null;
@@ -54,11 +63,17 @@ public class Move {
         }
         return new Move(currentCoordinate, targetCoordinate, degree, oppositeState, oppositeDirection);
     }
-	
+    
+    /**
+     * @return Return the SpeedChange of this instance of Move.
+     */
     public SpeedState getSpeedState() {
         return this.speedState;
     }
     
+    /**
+     * @return Return the direction (DirectionUtils.RelativeDirectionDU) of this instance of Move.
+     */
     public RelativeDirection getTurnDirection() {
     	return this.turnDirection;
     }

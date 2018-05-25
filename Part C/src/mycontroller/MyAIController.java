@@ -36,10 +36,13 @@ public class MyAIController extends CarController{
 	
 		private Navigator navigator;
 		
+		private boolean hasTraversed;
+		
 		public MyAIController(Car car) {
 			super(car);
 			this.TOTAL_KEYS = car.getKey();
 			navigator = new Navigator(this, null, false, this.getHealth(), 0);
+			this.hasTraversed = false;
 		}
 		
 		Coordinate initialGuess;
@@ -51,6 +54,26 @@ public class MyAIController extends CarController{
 			
 			// Gets what the car can see
 			HashMap<Coordinate, MapTile> currentView = getView();
+			ArrayList<Coordinate> keyCoordinates = new ArrayList<>();
+			keyCoordinates.add(new Coordinate("19,2"));
+			checkStateChange();
+			
+			if(!hasTraversed) {
+				Explore(delta, currentView);
+				keyCoordinates = keyFinder(currentView);
+			}
+			else {
+				this.applyReverseAcceleration();
+				System.out.println("Moving forward");
+				navigator.update(delta, keyCoordinates);
+			}
+			navigator.update(delta, keyCoordinates); 
+			System.out.println("FOLLOWING COORDINATES NOW ");
+		
+			
+		}
+		
+		public ArrayList<Coordinate> keyFinder(HashMap<Coordinate, MapTile> currentView){
 			ArrayList<Coordinate> coords = new ArrayList<>();
 			for (Coordinate name: currentView.keySet()){ 
 				MapTile value = currentView.get(name); 
@@ -61,6 +84,7 @@ public class MyAIController extends CarController{
 		        		for(Coordinate c : keyLocs.keySet()) {
 		        			coords.add(c);
 		        			this.applyBrake();
+		        			hasTraversed = true;
 		        			break;
 		        		}
 		        		break;
@@ -71,15 +95,16 @@ public class MyAIController extends CarController{
 			        		keyLocs.put(name,keyVal);
 			        	}
 			        }
-			        navigator.update(delta, coords); 
-					
+			        
 			    }
 			} 
 			System.out.println(keyLocs.entrySet());
-			
-			
-			checkStateChange();
-
+			return coords;
+		}
+		
+		
+		
+		public void Explore(float delta, HashMap<Coordinate, MapTile> currentView) {
 			// If you are not following a wall initially, find a wall to stick to!
 			if(!isFollowingWall){
 				followWall(currentView, delta);
@@ -122,6 +147,7 @@ public class MyAIController extends CarController{
 					isTurningLeft = true;
 				}
 			}
+			
 		}
 		
 

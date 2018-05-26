@@ -1,9 +1,13 @@
-package mycontroller;
+package navigation;
 import java.util.*;
 
 import com.badlogic.gdx.math.Vector2;
 
+import mycontroller.Direction;
+import mycontroller.Move;
+import mycontroller.MyAIController;
 import mycontroller.Direction.RelativeDirection;
+import mycontroller.Move.SpeedState;
 import utilities.Coordinate;
 import utilities.PeekTuple;
 import world.WorldSpatial;

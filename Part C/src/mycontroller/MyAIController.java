@@ -1,8 +1,10 @@
 package mycontroller;
 
 import controller.CarController;
-import explore.Explorer;
+import strategies.Explorer;
 import navigation.Navigator;
+import navigation.SimpleNavigator;
+import strategies.SimpleWallFollower;
 import world.Car;
 
 import java.util.*;
@@ -18,8 +20,6 @@ import world.WorldSpatial;
 public class MyAIController extends CarController{
 
 		// How many minimum units the wall is away from the player.
-		
-		
 
 		private WorldSpatial.RelativeDirection lastTurnDirection = null; // Shows the last turn direction the car takes.
 
@@ -46,10 +46,11 @@ public class MyAIController extends CarController{
 		public MyAIController(Car car) {
 			super(car);
 			this.TOTAL_KEYS = car.getKey();
-			navigator = new Navigator(this, null, false, this.getHealth(), 0);
+			navigator = new SimpleNavigator(this);
+			
 			this.hasTraversed = false;
 			this.setSensor(new Sensor(this));
-			this.explorer = new Explorer(getSensor(), navigator, this);
+			this.explorer = new SimpleWallFollower();
 		}
 		
 		Coordinate initialGuess;
@@ -59,24 +60,26 @@ public class MyAIController extends CarController{
 		@Override
 		public void update(float delta) {
 			
-			// Gets what the car can see
-			HashMap<Coordinate, MapTile> currentView = getView();
-			ArrayList<Coordinate> keyCoordinates = new ArrayList<>();
-			keyCoordinates.add(new Coordinate("19,2"));
-			checkStateChange();
 			
-			if(!hasTraversed) {
-				explorer.explore(delta, currentView);
-				keyCoordinates = keyFinder(currentView);
-			}
-			else {
-				this.applyReverseAcceleration();
-				System.out.println("Moving forward");
-				navigator.update(delta, keyCoordinates);
-			}
-			navigator.update(delta, keyCoordinates); 
-			System.out.println("FOLLOWING COORDINATES NOW ");
-		
+			explorer.update(this, navigator, delta, sensor);
+//			// Gets what the car can see
+//			HashMap<Coordinate, MapTile> currentView = getView();
+//			ArrayList<Coordinate> keyCoordinates = new ArrayList<>();
+//			keyCoordinates.add(new Coordinate("19,2"));
+//			checkStateChange();
+//			
+//			if(!hasTraversed) {
+//				explorer.explore(delta, currentView);
+//				keyCoordinates = keyFinder(currentView);
+//			}
+//			else {
+//				this.applyReverseAcceleration();
+//				System.out.println("Moving forward");
+//				navigator.update(delta, keyCoordinates);
+//			}
+//			navigator.update(delta, keyCoordinates); 
+//			System.out.println("FOLLOWING COORDINATES NOW ");
+//		
 			
 		}
 		
@@ -117,7 +120,7 @@ public class MyAIController extends CarController{
 		 * Checks whether the car's state has changed or not, stops turning if it
 		 *  already has.
 		 */
-		private void checkStateChange() {
+		public void checkStateChange() {
 			if(previousState == null){
 				previousState = getOrientation();
 			}

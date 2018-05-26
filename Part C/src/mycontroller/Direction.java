@@ -70,33 +70,7 @@ public class Direction {
      * @param direction
      * @return
      */
-//    public static WorldSpatial.Direction getToSideOf(Direction orientation, RelativeDirection direction) {
-//        if (direction == RelativeDirection.LEFT) {
-//            return getLeftOf(orientation);
-//        } else {
-//            return getRightOf(orientation);
-//        }
-//    }
-//    
-//    
-//    public static Direction getToSideOf(Direction orientation, RelativeDirection direction) {
-//        if (direction == RelativeDirection.BACKWARD) {
-//            return getLeftOf(getLeftOf(orientation));
-//        } else {
-//            return orientation;
-//        }
-//    }
-//    
-//    
-//    /**
-//     * Gets the euclidian distance between two Coordinates.
-//     * 
-//     * @param c1
-//     *            The first Coordinate
-//     * @param c2
-//     *            The second Coordinate
-//     * @return The euclidian distance between two coordinates.
-//     */
+
     public static float distanceBetweenCoords(Coordinate c1, Coordinate c2) {
         float xDiff = Math.abs(c1.x - c2.x);
         float yDiff = Math.abs(c1.y - c2.y);

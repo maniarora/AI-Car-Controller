@@ -26,10 +26,10 @@ public class MyAIController extends CarController{
 		private WorldSpatial.Direction previousState = null; // Keeps track of the previous state
 		
 		// Car Speed to move at
-		public final float CAR_SPEED = 3;
+		
 		
 		// Offset used to differentiate between 0 and 360 degrees
-		private int EAST_THRESHOLD = 3;
+		
 		
 		private final int TOTAL_KEYS;
 	
@@ -48,8 +48,8 @@ public class MyAIController extends CarController{
 			this.TOTAL_KEYS = car.getKey();
 			navigator = new Navigator(this, null, false, this.getHealth(), 0);
 			this.hasTraversed = false;
-			this.sensor = new Sensor(this);
-			this.explorer = new Explorer(sensor, navigator,this);
+			this.setSensor(new Sensor(this));
+			this.explorer = new Explorer(getSensor(), navigator, this);
 		}
 		
 		Coordinate initialGuess;
@@ -123,23 +123,15 @@ public class MyAIController extends CarController{
 			}
 			else{
 				if(previousState != getOrientation()){
-					if(sensor.isTurningLeft()){
-						sensor.setTurningLeft(false);
+					if(getSensor().isTurningLeft()){
+						getSensor().setTurningLeft(false);
 					}
-					if(sensor.isTurningRight()){
-						TurningRight = false;
+					if(getSensor().isTurningRight()){
+						getSensor().setTurningRight(false);
 					}
 					previousState = getOrientation();
 				}
 			}
-		}
-
-		public boolean isFollowingWall() {
-			return isFollowingWall;
-		}
-
-		public void setFollowingWall(boolean isFollowingWall) {
-			this.isFollowingWall = isFollowingWall;
 		}
 
 		public WorldSpatial.RelativeDirection getLastTurnDirection() {
@@ -148,6 +140,14 @@ public class MyAIController extends CarController{
 
 		public void setLastTurnDirection(WorldSpatial.RelativeDirection lastTurnDirection) {
 			this.lastTurnDirection = lastTurnDirection;
+		}
+
+		public Sensor getSensor() {
+			return sensor;
+		}
+
+		public void setSensor(Sensor sensor) {
+			this.sensor = sensor;
 		}
 		
 		

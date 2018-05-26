@@ -6,8 +6,10 @@ import com.badlogic.gdx.math.Vector2;
 import mycontroller.Direction;
 import mycontroller.Move;
 import mycontroller.MyAIController;
+import mycontroller.Sensor;
 import mycontroller.Direction.RelativeDirection;
 import mycontroller.Move.SpeedState;
+import tiles.MapTile;
 import utilities.Coordinate;
 import utilities.PeekTuple;
 import world.WorldSpatial;
@@ -22,8 +24,12 @@ public class Navigator {
 	private Move escapeMove;
 	private Integer numEscapeMoves;
 	
+	
+	
 	private final Double MAX_SPEED = 2.0;
 	private final Integer TRACKED_MOVES = 30;
+	private int EAST_THRESHOLD = 3;
+	private final float CAR_SPEED = 3;
 	
 	public Navigator(MyAIController controller, LinkedList<Move> moveHistory, Boolean escaping, Float previousHealth,
 			Integer numEscapeMoves) {
@@ -35,14 +41,7 @@ public class Navigator {
 		this.numEscapeMoves = 0;
 	}
 	
-    /**
-     * update takes delta, and a list of coordinates to follow, and sends messages to the car to turn and accelerate or
-     * reverse accelerate in order to follow the first coordinate in the list. The list is used for extensibility
-     * purposes.
-     *
-     * @param delta          The time step specified in Simulation.
-     * @param coordsToFollow The list of coordinates received from a PathFinder class, used to direct the car.
-     */
+	
 	public void update(float delta, ArrayList<Coordinate> coordsToNavigate) {
 		Coordinate coord = null;
 		
@@ -82,14 +81,7 @@ public class Navigator {
 	}
 
 
-    /**
-     * Generates and tests different alternatives for acceleration and turning, selecting and making the move that is
-     * predicted by peek(...) to take the car closest to the targeted coordinate.
-     *
-     * @param tarDegree The degree of the targeted coordinate.
-     * @param coord     The targeted coordinate given by the PathFinder class.
-     * @param delta     The time step specified in Simulation.
-     */
+
 	private void makeBestTurningMove(float targetDegree, Coordinate coord, float delta) {
 
         // Generate combinations of acceleration, reverse acceleration, Left & Right turns
@@ -136,14 +128,6 @@ public class Navigator {
         
     }
 
-    /**
-     * updateEscape is an alternate update method, used during 'escape' mode.
-     * I.e. when the car is running into a wall without stopping.
-     *
-     * @param delta     The time step specified in Simulation
-     * @param coord     The coordinate given by the PathFinder class, directing the car
-     * @param tarDegree The degree the targeted coordinate is from the direction the car is currently facing.
-     */
 	private void updateEscape(float delta, Coordinate coord, float targetDegree) {
 		
 		if(escaping && numEscapeMoves>0 && allSame(moveHistory)) {
@@ -163,12 +147,6 @@ public class Navigator {
 		}
 	}
 	
-    /**
-     * allSame takes a list of previous moves, and returns true if they are all the same.
-     *
-     * @param moveHistory A LinkedList of the moves that occurred immediately before the current update.
-     * @return Boolean true if all the moves in the list are the same, false otherwise.
-     */
 	private Boolean allSame(LinkedList<Move> moveHistory) {
 		LinkedList<Move> moves = new LinkedList<Move>(moveHistory);
 		Move firstMove = moves.poll();
@@ -185,13 +163,6 @@ public class Navigator {
 		return true;
 	}
 	
-    /**
-     * moveForward takes a Move, a time step, and a target coordinate, and moves Forward in the direction described
-     * in the escape move.
-     *
-     * @param delta       The time step specified in Simulation.
-     * @param targetCoord The coordinate targeted by PathFinder.
-     */
 	private void moveForward(float delta, Coordinate targetCoord) {
 		Move.SpeedState speedState;
 		RelativeDirection direction = Direction.RelativeDirection.FORWARD;
@@ -207,15 +178,7 @@ public class Navigator {
 		previousHealth = controller.getHealth();
 		moveHistory.offer(new Move(new Coordinate(controller.getPosition()), targetCoord, controller.getAngle(), speedState, direction));
 	}
-
-    /**
-     * moveCar takes a specified escape move, and moves in the direction and with the acceleration specified by that
-     * move.
-     *
-     * @param escapeMove  The Move generated when entering escape mode -> the opposite move to running into the wall.
-     * @param delta       The time step specified in Simulation.
-     * @param targetCoord The coordinate targeted by PathFinder.
-     */
+	
 	private void moveCar(Move escapeMove, float delta, Coordinate targetCoord) {
 		Move.SpeedState speedState;
 		RelativeDirection direction;
@@ -240,15 +203,6 @@ public class Navigator {
 		moveHistory.offer(new Move(new Coordinate(controller.getPosition()), targetCoord, controller.getAngle(), speedState, direction));
 	}
 	
-    /**
-     * moveCar takes a an existing velocity, a desired velocity, a time step, and a direction, and controls the car to
-     * move in that direction.
-     *
-     * @param currentVelocity The current velocity the car is travelling at.
-     * @param desiredVelocity The faster or slower velocity that was identified as desirable
-     * @param delta           The time step specified in Simulation.
-     * @param bestDirection   The direction identified as desirable.
-     */
     private void moveCar(float currentVelocity, float desiredVelocity, float delta,
             Direction.RelativeDirection bestDirection) {
 		if (currentVelocity < desiredVelocity) {
@@ -266,13 +220,6 @@ public class Navigator {
 		previousHealth = controller.getHealth();
 	}
     
-    /**
-     * getTestSpeeds generates an array of Vector2 objects representing different speeds, to be given to peek(...) to
-     * generate different possible moves the car can make.
-     *
-     * @param currVelocity The current velocity of the car.
-     * @return An array of Vector2 objects representing the velocities to feed into peek(...).
-     */
     private Vector2[] getTestSpeeds(Vector2 currVelocity) {
         float addedX = (Double.compare(currVelocity.x, 0.0) == 0 ? (float) .001 : 0);
         float addedY = (Double.compare(currVelocity.y, 0.0) == 0 ? (float) .001 : 0);
@@ -285,15 +232,6 @@ public class Navigator {
         return testSpeeds;
     }
     
-    /**
-     * getSpeedChanges generates an array of Move.SpeedChange objects representing different speeds, to be given to
-     * peek(...) to generate different possible moves the car can make.
-     *
-     * @param testSpeeds   The array of different possible speeds to be fed into peek(...).
-     * @param currVelocity The current velocity of the car.
-     * @return Move.SpeedState[] an array of Move.SpeedChange objects representing the different changes in speed that
-     * correlate exactly with the different Vector2 objects in testSpeeds.
-     */
     private Move.SpeedState[] getSpeedChanges(Vector2[] testSpeeds, Vector2 currVelocity) {
         float currentSpeed = currVelocity.len();
         Move.SpeedState[] speedChanges = new Move.SpeedState[testSpeeds.length];
@@ -306,14 +244,7 @@ public class Navigator {
         }
         return speedChanges;
     }
-    
-    /**
-     * goForwardOrBackward takes a direction and a speed change, and directs the car only forward or backwards, based
-     * on those arguments.
-     *
-     * @param d           Represents the direction specified by the calling object.
-     * @param speedChange Represents the change in speed specified by the calling object.
-     */
+
     private void goForwardOrBackward(Direction.RelativeDirection d, Move.SpeedState speedChange) {
         if (d == Direction.RelativeDirection.FORWARD) {
             if (speedChange == Move.SpeedState.ACCELERATING) {
@@ -332,13 +263,6 @@ public class Navigator {
         previousHealth = controller.getHealth();
     }
     
-    /**
-     * adjustVelocity takes a coordinate and indicates whether the PathFinder is communicating that the car should slow,
-     * maintain its speed, or accelerate.
-     *
-     * @param coordinate The targeted coordinate given by the PathFinder
-     * @return A Move.SpeedState that indicates the change in speed desired by the PathFinder.
-     */
     private Move.SpeedState adjustVelocity(Coordinate coordinate) {
         Coordinate carPosition = new Coordinate(controller.getPosition());
 
@@ -357,12 +281,6 @@ public class Navigator {
         }
     }
     
-    /**
-     * getDegreeOfCoord Gets the degree of the Coordinate, in relation to the direction the car is currently facing.
-     *
-     * @param coord The coordinate being targeted
-     * @return double representing the degree of the coordinate in relation to the current direction of the car.
-     */
     private double getDegreeOfCoord(Coordinate coord) {
 
         // Calculate the deltas as the next minus the current
@@ -383,12 +301,6 @@ public class Navigator {
         return angle;
     }
     
-    /**
-     * getDirection takes a degree and returns the direction of that degree.
-     *
-     * @param degree A double representing the degree being converted into a direction.
-     * @return A Direction.RelativeDirection representation of the direction.
-     */
     private Direction.RelativeDirection getDirection(double degree) {
 
         double tarAngle = degree;
@@ -414,6 +326,180 @@ public class Navigator {
         }
     }
     
+//    -----------------
+    
+
+	public void followWall(HashMap<Coordinate, MapTile> currentView, float delta) {
+		if(controller.getSpeed() < CAR_SPEED){
+			controller.applyForwardAcceleration();
+		}
+		// Turn towards the north
+		if(!controller.getOrientation().equals(WorldSpatial.Direction.NORTH)){
+			controller.setLastTurnDirection(WorldSpatial.RelativeDirection.LEFT);
+			applyLeftTurn(controller.getOrientation(),delta);
+		}
+		if(controller.getSensor().checkNorth(currentView)){
+			// Turn right until we go back to east!
+			if(!controller.getOrientation().equals(WorldSpatial.Direction.EAST)){
+				controller.setLastTurnDirection(WorldSpatial.RelativeDirection.RIGHT);
+				applyRightTurn(controller.getOrientation(),delta);
+			}
+			else{
+				controller.getSensor().setFollowingWall(true);
+			}
+		}
+	}
+	
+	/**
+	 * Readjust the car to the orientation we are in.
+	 * @param lastTurnDirection
+	 * @param delta
+	 */
+	public void readjust(WorldSpatial.RelativeDirection lastTurnDirection, float delta) {
+		if(lastTurnDirection != null){
+			if(!controller.getSensor().isTurningRight() && lastTurnDirection.equals(WorldSpatial.RelativeDirection.RIGHT)){
+				adjustRight(controller.getOrientation(),delta);
+			}
+			else if(!controller.getSensor().isTurningLeft() && lastTurnDirection.equals(WorldSpatial.RelativeDirection.LEFT)){
+				adjustLeft(controller.getOrientation(),delta);
+			}
+		}
+		
+	}
+	
+	/**
+	 * Try to orient myself to a degree that I was supposed to be at if I am
+	 * misaligned.
+	 */
+	public void adjustLeft(WorldSpatial.Direction orientation, float delta) {
+		
+		switch(orientation){
+		case EAST:
+			if(controller.getAngle() > WorldSpatial.EAST_DEGREE_MIN+ EAST_THRESHOLD){
+				controller.turnRight(delta);
+			}
+			break;
+		case NORTH:
+			if(controller.getAngle() > WorldSpatial.NORTH_DEGREE){
+				controller.turnRight(delta);
+			}
+			break;
+		case SOUTH:
+			if(controller.getAngle() > WorldSpatial.SOUTH_DEGREE){
+				controller.turnRight(delta);
+			}
+			break;
+		case WEST:
+			if(controller.getAngle() > WorldSpatial.WEST_DEGREE){
+				controller.turnRight(delta);
+			}
+			break;
+			
+		default:
+			break;
+		}
+		
+	}
+
+	public void adjustRight(WorldSpatial.Direction orientation, float delta) {
+		switch(orientation){
+		case EAST:
+			if(controller.getAngle() > WorldSpatial.SOUTH_DEGREE && controller.getAngle() < WorldSpatial.EAST_DEGREE_MAX){
+				controller.turnLeft(delta);
+			}
+			break;
+		case NORTH:
+			if(controller.getAngle() < WorldSpatial.NORTH_DEGREE){
+				controller.turnLeft(delta);
+			}
+			break;
+		case SOUTH:
+			if(controller.getAngle() < WorldSpatial.SOUTH_DEGREE){
+				controller.turnLeft(delta);
+			}
+			break;
+		case WEST:
+			if(controller.getAngle() < WorldSpatial.WEST_DEGREE){
+				controller.turnLeft(delta);
+			}
+			break;
+			
+		default:
+			break;
+		}
+		
+	}
+	
+	/**
+	 * Turn the car counter clock wise (think of a compass going counter clock-wise)
+	 */
+	public void applyLeftTurn(WorldSpatial.Direction orientation, float delta) {
+		switch(orientation){
+		case EAST:
+			if(!controller.getOrientation().equals(WorldSpatial.Direction.NORTH)){
+				controller.turnLeft(delta);
+			}
+			break;
+		case NORTH:
+			if(!controller.getOrientation().equals(WorldSpatial.Direction.WEST)){
+				controller.turnLeft(delta);
+			}
+			break;
+		case SOUTH:
+			if(!controller.getOrientation().equals(WorldSpatial.Direction.EAST)){
+				controller.turnLeft(delta);
+			}
+			break;
+		case WEST:
+			if(!controller.getOrientation().equals(WorldSpatial.Direction.SOUTH)){
+				controller.turnLeft(delta);
+			}
+			break;
+		default:
+			break;
+		
+		}
+		
+	}
+	
+	/**
+	 * Turn the car clock wise (think of a compass going clock-wise)
+	 */
+	public void applyRightTurn(WorldSpatial.Direction orientation, float delta) {
+		switch(orientation){
+		case EAST:
+			if(!controller.getOrientation().equals(WorldSpatial.Direction.SOUTH)){
+				controller.turnRight(delta);
+				
+			}
+			break;
+		case NORTH:
+			if(!controller.getOrientation().equals(WorldSpatial.Direction.EAST)){
+				controller.turnRight(delta);
+			}
+			break;
+		case SOUTH:
+			if(!controller.getOrientation().equals(WorldSpatial.Direction.WEST)){
+				controller.turnRight(delta);
+			}
+			break;
+		case WEST:
+			if(!controller.getOrientation().equals(WorldSpatial.Direction.NORTH)){
+				controller.turnRight(delta);
+			}
+			break;
+		default:
+			break;
+		
+		}
+		
+	}
+	
+	public float getCarSpeed() {
+		return this.CAR_SPEED;
+	}
+
+	
     
 
 }

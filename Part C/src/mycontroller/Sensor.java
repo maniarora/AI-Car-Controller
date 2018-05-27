@@ -17,7 +17,9 @@ public class Sensor {
 	private boolean isTurningRight = false; 
 	
 	private int wallSensitivity = 2;
+	
 	private MyAIController myAIController;
+	 private HashMap<Coordinate, MapTile> currentView;
 	
 	public Sensor(MyAIController myAIController) {
 		this.myAIController = myAIController;
@@ -29,6 +31,12 @@ public class Sensor {
 	 * @param currentView what the car can currently see
 	 * @return
 	 */
+	
+	public void update() {
+		this.currentView = myAIController.getView();
+        
+		
+	}
 	
 	 public boolean checkWallAhead(WorldSpatial.Direction orientation, HashMap<Coordinate, MapTile> currentView){
 		switch(orientation){

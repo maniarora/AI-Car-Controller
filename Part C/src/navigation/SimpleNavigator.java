@@ -25,12 +25,7 @@ public class SimpleNavigator extends Navigator {
 	
 	@Override
 	public void update(float delta, ArrayList<Coordinate> coordsToNavigate) {
-		
-		
-		
 	}
-	
-	
 		
 }
 	

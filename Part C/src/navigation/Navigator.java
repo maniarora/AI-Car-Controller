@@ -13,7 +13,7 @@ public abstract class Navigator {
 	public int EAST_THRESHOLD = 3;
 	public float MAX_CAR_SPEED;
 	public MyAIController controller;
-	public float carSpeed;
+	public float carSpeed = 2.75f;
 	
 	/**
 	 * Readjust the car to the orientation we are in.

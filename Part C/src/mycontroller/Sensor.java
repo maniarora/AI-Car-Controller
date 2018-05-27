@@ -5,7 +5,11 @@ import java.util.HashMap;
 import tiles.MapTile;
 import utilities.Coordinate;
 import world.WorldSpatial;
-
+/**
+ * This class provides all the sensing functionalities of the vehicle, 
+ * detecting its surroundings. 
+ * @author Manindra Arora (827703), Ninad Kavi (855506), Ujashkumar Patel (848395)
+ * */
 public class Sensor {
 	
 	private boolean isFollowingWall = false; // This is initialized when the car sticks to a wall.

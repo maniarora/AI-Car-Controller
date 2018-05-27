@@ -9,6 +9,14 @@ import tiles.MapTile;
 import utilities.Coordinate;
 import world.WorldSpatial;
 
+
+/**
+ * This abstract class implements the methods that enable the car to navigate 
+ * from its current position to the desired coordinates. It is primarily
+ * responsible for moving the car, and adjusting the alignment of the car 
+ * based on its orientation.
+ * @author Manindra Arora (827703), Ninad Kavi (855506), Ujashkumar Patel (848395)
+ * */
 public abstract class Navigator {
 	
 	public int EAST_THRESHOLD = 3;

@@ -16,7 +16,11 @@ import utilities.Coordinate;
 import world.Car;
 import world.WorldSpatial;
 
-
+/**
+ * This class is the driver for the whole program, calling upon explorer and navigator.
+ * @author Manindra Arora (827703), Ninad Kavi (855506), Ujashkumar Patel (848395)
+ * 
+ * */
 public class MyAIController extends CarController{
 
 // 	Shows the last turn direction the car takes
@@ -64,6 +68,7 @@ public class MyAIController extends CarController{
 		ArrayList<Coordinate> keyCoordinates = new ArrayList<>();
 		keyCoordinates = keyFinder(currentView);
 		
+		navigator.update(delta,keyCoordinates);
 		
 	}
 	

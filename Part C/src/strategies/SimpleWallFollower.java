@@ -11,7 +11,29 @@ import world.WorldSpatial;
 
 public class SimpleWallFollower extends Explorer{
 
-
+//	@Override
+//	public void update(HashMap<Coordinate, MapTile> currentView, float delta, MyAIController controller, Navigator navigator) {
+//	
+//			
+//			if(controller.getSpeed() < navigator.MAX_CAR_SPEED){
+//				controller.applyForwardAcceleration();
+//			}
+//			// Turn towards the north
+//			if(!controller.getOrientation().equals(WorldSpatial.Direction.NORTH)){
+//				controller.setLastTurnDirection(WorldSpatial.RelativeDirection.LEFT);
+//				navigator.applyLeftTurn(controller.getOrientation(),delta);
+//			}
+//			if(controller.getSensor().checkNorth(currentView)){
+//				// Turn right until we go back to east!
+//				if(!controller.getOrientation().equals(WorldSpatial.Direction.EAST)){
+//					controller.setLastTurnDirection(WorldSpatial.RelativeDirection.RIGHT);
+//					navigator.applyRightTurn(controller.getOrientation(),delta);
+//				}
+//				else{
+//					controller.getSensor().setFollowingWall(true);
+//				}
+//			}
+//		}
 
 	public void update(MyAIController controller, Navigator navigator, float delta, Sensor sensor) {
 		
@@ -29,7 +51,6 @@ public class SimpleWallFollower extends Explorer{
 			if(!controller.getOrientation().equals(WorldSpatial.Direction.NORTH)){
 				controller.setLastTurnDirection(WorldSpatial.RelativeDirection.LEFT);
 				navigator.applyLeftTurn(controller.getOrientation(),delta);
-				
 			}
 			if(sensor.checkNorth(currentView)){
 				// Turn right until we go back to east!

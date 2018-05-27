@@ -1,10 +1,7 @@
-package strategies;
+package mycontroller;
 
 import java.util.HashMap;
 
-import mycontroller.MyAIController;
-import mycontroller.Sensor;
-import navigation.Navigator;
 import tiles.MapTile;
 import utilities.Coordinate;
 import world.WorldSpatial;

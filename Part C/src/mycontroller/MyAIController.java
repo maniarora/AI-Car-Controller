@@ -1,10 +1,6 @@
 package mycontroller;
 
 import controller.CarController;
-import strategies.Explorer;
-import navigation.Navigator;
-import navigation.SimpleNavigator;
-import strategies.SimpleWallFollower;
 import world.Car;
 
 import java.util.*;

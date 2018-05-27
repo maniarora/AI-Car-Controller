@@ -1,10 +1,8 @@
-package navigation;
+package mycontroller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-
-import mycontroller.MyAIController;
 import tiles.MapTile;
 import utilities.Coordinate;
 import world.WorldSpatial;

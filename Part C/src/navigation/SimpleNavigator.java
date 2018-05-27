@@ -3,7 +3,7 @@ package navigation;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import mycontroller.Move;
+
 import mycontroller.MyAIController;
 import tiles.MapTile;
 import utilities.Coordinate;
@@ -22,11 +22,7 @@ public class SimpleNavigator extends Navigator {
 		this.controller = myAIController;
 	}
 	
-	public void moveCar(Move move, float delta){
-		
-	}
 
-	
 	@Override
 	public void update(float delta, ArrayList<Coordinate> coordsToNavigate) {
 	}

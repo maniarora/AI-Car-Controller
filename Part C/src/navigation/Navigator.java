@@ -3,7 +3,6 @@ package navigation;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import mycontroller.Move;
 import mycontroller.MyAIController;
 import tiles.MapTile;
 import utilities.Coordinate;

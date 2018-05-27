@@ -20,8 +20,8 @@ public class Sensor {
 	}
 
 	/**
-	 * Check if you have a wall in front of you!
-	 * @param orientation the orientation we are in based on WorldSpatial
+	 * Check if car has a wall infront.
+	 * @param orientation the current orientation of the car
 	 * @param currentView what the car can currently see
 	 * @return
 	 */
@@ -29,17 +29,18 @@ public class Sensor {
 		switch(orientation){
 		case EAST:
 			return checkEast(currentView);
+		case WEST:
+			return checkWest(currentView);
 		case NORTH:
 			return checkNorth(currentView);
 		case SOUTH:
 			return checkSouth(currentView);
-		case WEST:
-			return checkWest(currentView);
 		default:
 			return false;
 		
 		}
 	}
+	 
 	/**
 	 * Check if the wall is on your left hand side given your orientation
 	 * @param orientation
@@ -120,6 +121,12 @@ public class Sensor {
 		return false;
 	}
 
+	
+	/*************************************************************************
+								Helper Methods 				
+	 ************************************************************************/
+	
+	
 	public boolean isTurningLeft() {
 		return isTurningLeft;
 	}

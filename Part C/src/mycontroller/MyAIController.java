@@ -162,7 +162,5 @@ public class MyAIController extends CarController{
 	public void setSensor(Sensor sensor) {
 		this.sensor = sensor;
 	}
-	
-	
 
 }

@@ -29,6 +29,7 @@ public class Sensor {
 	 * @param currentView what the car can currently see
 	 * @return
 	 */
+	
 	 public boolean checkWallAhead(WorldSpatial.Direction orientation, HashMap<Coordinate, MapTile> currentView){
 		switch(orientation){
 		case EAST:

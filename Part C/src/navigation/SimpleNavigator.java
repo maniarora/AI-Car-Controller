@@ -32,6 +32,12 @@ public class SimpleNavigator extends Navigator {
 	@Override
 	public void update(float delta, ArrayList<Coordinate> coordsToNavigate) {
 	}
+
+	@Override
+	public void move(float delta) {
+		// TODO Auto-generated method stub
+		
+	}
 		
 }
 	

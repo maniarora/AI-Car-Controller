@@ -23,11 +23,7 @@ public abstract class Navigator {
 	public float MAX_CAR_SPEED;
 	public MyAIController controller;
 	public float carSpeed = 3;
-	
-	
-	public abstract void moveCar(Move move, float delta);
-	public abstract void update(float delta, ArrayList<Coordinate> coordsToNavigate); 
-	 
+
 	/**
 	 * Readjust the car to the orientation we are in.
 	 * @param lastTurnDirection

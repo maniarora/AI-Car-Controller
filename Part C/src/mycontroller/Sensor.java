@@ -5,7 +5,11 @@ import java.util.HashMap;
 import tiles.MapTile;
 import utilities.Coordinate;
 import world.WorldSpatial;
-
+/**
+ * This class provides all the sensing functionalities of the vehicle, 
+ * detecting its surroundings. 
+ * @author Manindra Arora (827703), Ninad Kavi (855506), Ujashkumar Patel (848395)
+ * */
 public class Sensor {
 	
 	private boolean isFollowingWall = false; // This is initialized when the car sticks to a wall.
@@ -13,7 +17,9 @@ public class Sensor {
 	private boolean isTurningRight = false; 
 	
 	private int wallSensitivity = 2;
+	
 	private MyAIController myAIController;
+	 private HashMap<Coordinate, MapTile> currentView;
 	
 	public Sensor(MyAIController myAIController) {
 		this.myAIController = myAIController;
@@ -25,16 +31,22 @@ public class Sensor {
 	 * @param currentView what the car can currently see
 	 * @return
 	 */
-	 public boolean checkWallAhead(WorldSpatial.Direction orientation, HashMap<Coordinate, MapTile> currentView){
+	
+	public void update(float delta) {
+		this.currentView = myAIController.getView();     
+		
+	}
+	
+	 public boolean checkWallAhead(WorldSpatial.Direction orientation){
 		switch(orientation){
 		case EAST:
-			return checkEast(currentView);
+			return checkEast();
 		case WEST:
-			return checkWest(currentView);
+			return checkWest();
 		case NORTH:
-			return checkNorth(currentView);
+			return checkNorth();
 		case SOUTH:
-			return checkSouth(currentView);
+			return checkSouth();
 		default:
 			return false;
 		
@@ -47,17 +59,17 @@ public class Sensor {
 	 * @param currentView
 	 * @return
 	 */
-	 public boolean checkFollowingWall(WorldSpatial.Direction orientation, HashMap<Coordinate, MapTile> currentView) {
+	 public boolean checkFollowingWall(WorldSpatial.Direction orientation) {
 		
 		switch(orientation){
 		case EAST:
-			return checkNorth(currentView);
+			return checkNorth();
 		case NORTH:
-			return checkWest(currentView);
+			return checkWest();
 		case SOUTH:
-			return checkEast(currentView);
+			return checkEast();
 		case WEST:
-			return checkSouth(currentView);
+			return checkSouth();
 		default:
 			return false;
 		}
@@ -73,7 +85,7 @@ public class Sensor {
 	 * checkNorth will check up to wallSensitivity amount of tiles to the top.
 	 * checkSouth will check up to wallSensitivity amount of tiles below.
 	 */
-	public boolean checkEast(HashMap<Coordinate, MapTile> currentView){
+	public boolean checkEast(){
 		// Check tiles to my right
 		Coordinate currentPosition = new Coordinate(myAIController.getPosition());
 		for(int i = 0; i <= wallSensitivity; i++){
@@ -85,7 +97,7 @@ public class Sensor {
 		return false;
 	}
 	
-	public boolean checkWest(HashMap<Coordinate,MapTile> currentView){
+	public boolean checkWest(){
 		// Check tiles to my left
 		Coordinate currentPosition = new Coordinate(myAIController.getPosition());
 		for(int i = 0; i <= wallSensitivity; i++){
@@ -97,7 +109,7 @@ public class Sensor {
 		return false;
 	}
 	
-	public boolean checkNorth(HashMap<Coordinate,MapTile> currentView){
+	public boolean checkNorth(){
 		// Check tiles to towards the top
 		Coordinate currentPosition = new Coordinate(myAIController.getPosition());
 		for(int i = 0; i <= wallSensitivity; i++){
@@ -109,7 +121,7 @@ public class Sensor {
 		return false;
 	}
 	
-	public boolean checkSouth(HashMap<Coordinate,MapTile> currentView){
+	public boolean checkSouth(){
 		// Check tiles towards the bottom
 		Coordinate currentPosition = new Coordinate(myAIController.getPosition());
 		for(int i = 0; i <= wallSensitivity; i++){

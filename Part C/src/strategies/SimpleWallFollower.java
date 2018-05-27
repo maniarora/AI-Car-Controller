@@ -9,10 +9,27 @@ import tiles.MapTile;
 import utilities.Coordinate;
 import world.WorldSpatial;
 
+/**
+ * This class serves as the basic Exploration strategy we use. As provided 
+ * in the base code, we find the nearest Left-wall and stick to it and follow it
+ *  
+ * @author: Manindra Arora (827703) Ninad Kavi (855506)  Ujashkumar Patel (848395)
+ * 
+ * Group 37
+ */
+
 public class SimpleWallFollower extends Explorer{
-
-
-
+	/**
+	 * This method encompasses most of the functionality of our design, i.e 
+	 * finding a path for the car to move on. It uses data received from the 
+	 * sensor to generate a path and then supplies the necessary instruction to
+	 * the navigator in order to move the car
+	 * 
+	 * @param controller: the MyAIController used to implement the functionality
+	 * @param navigator: the navigator which moves the car about 
+	 * @param delta: delta since last timestep
+	 * @param sensor: the sensor which checks the car's surroundings
+	 * */
 	public void update(MyAIController controller, Navigator navigator, float delta, Sensor sensor) {
 		
 		// Gets what the car can see
@@ -29,9 +46,8 @@ public class SimpleWallFollower extends Explorer{
 			if(!controller.getOrientation().equals(WorldSpatial.Direction.NORTH)){
 				controller.setLastTurnDirection(WorldSpatial.RelativeDirection.LEFT);
 				navigator.applyLeftTurn(controller.getOrientation(),delta);
-				
 			}
-			if(sensor.checkNorth(currentView)){
+			if(sensor.checkNorth()){
 				// Turn right until we go back to east!
 				if(!controller.getOrientation().equals(WorldSpatial.Direction.EAST)){
 					controller.setLastTurnDirection(WorldSpatial.RelativeDirection.RIGHT);
@@ -53,7 +69,7 @@ public class SimpleWallFollower extends Explorer{
 			}
 			else if(sensor.isTurningLeft()){
 				// Apply the left turn if you are not currently near a wall.
-				if(!sensor.checkFollowingWall(controller.getOrientation(),currentView)){
+				if(!sensor.checkFollowingWall(controller.getOrientation())){
 					navigator.applyLeftTurn(controller.getOrientation(),delta);
 				}
 				else{
@@ -61,13 +77,13 @@ public class SimpleWallFollower extends Explorer{
 				}
 			}
 			// Try to determine whether or not the car is next to a wall.
-			else if(sensor.checkFollowingWall(controller.getOrientation(),currentView)){
+			else if(sensor.checkFollowingWall(controller.getOrientation())){
 				// Maintain some velocity
 				if(controller.getSpeed() < navigator.carSpeed){
 					controller.applyForwardAcceleration();
 				}
 				// If there is wall ahead, turn right!
-				if(sensor.checkWallAhead(controller.getOrientation(),currentView)){
+				if(sensor.checkWallAhead(controller.getOrientation())){
 					controller.setLastTurnDirection(WorldSpatial.RelativeDirection.RIGHT);
 					sensor.setTurningRight(true);				
 					
@@ -80,9 +96,6 @@ public class SimpleWallFollower extends Explorer{
 				sensor.setTurningLeft(true);
 			}
 		}
-		
-		
-		
 	}
 }
 	

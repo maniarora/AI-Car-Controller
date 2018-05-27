@@ -40,8 +40,31 @@ public class Direction {
      * 
      * @return 
      */
-    public static WorldSpatial.Direction getLeftOf(Direction orientation) {
-        return LEFT_OF.get(orientation);
+//    public static WorldSpatial.Direction getLeftOf(Direction orientation) {
+//        return LEFT_OF.get(orientation);
+//    }
+
+    /**
+     * Method for getting the clockwise or counter-clockwise orientation from 
+     * the given orientation. We iterate through the leftOf map and get the 
+     * key corresponding to the given value.
+     * 
+     * @param orientation the current orientation we aim to get side of
+     * @param dir the direction 
+     * @return 
+     */
+    public static WorldSpatial.Direction getSideOf(Direction orientation, RelativeDirection dir){
+    	
+    	if(dir == RelativeDirection.LEFT) {
+    		return LEFT_OF.get(orientation);
+    	}
+    	else {
+    		for (Entry<WorldSpatial.Direction, WorldSpatial.Direction> entry : LEFT_OF.entrySet()) {
+    			if (orientation.equals(entry.getValue())) 
+    				return entry.getKey();	
+    		} 		
+    	}
+    	return null;
     }
 
     /**
@@ -51,16 +74,25 @@ public class Direction {
      * 
      * @return 
      */
-    public static WorldSpatial.Direction getRightOf(Direction orientation) {
-        for (Entry<WorldSpatial.Direction, WorldSpatial.Direction> entry : LEFT_OF.entrySet()) {
-            if (orientation.equals(entry.getValue())) {
-                return entry.getKey();
-            }
-            
-        }
-        return null;
+//    public static WorldSpatial.Direction getRightOf(Direction orientation) {
+//        for (Entry<WorldSpatial.Direction, WorldSpatial.Direction> entry : LEFT_OF.entrySet()) {
+//            if (orientation.equals(entry.getValue())) {
+//                return entry.getKey();
+//            }
+//            
+//        }
+//        return null;
     }
-  
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     /**
      * Given an orientation and a relative direction, return the direction either
      * clockwise or counterclockwise of that given direction, based on the relative

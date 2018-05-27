@@ -65,15 +65,16 @@ public class MyAIController extends CarController{
 //			keyCoordinates.add(new Coordinate("19,2"));
 //			checkStateChange();
 //			
-//			if(!hasTraversed) {
-//				explorer.explore(delta, currentView);
-			keyCoordinates = keyFinder(currentView);
-//			}
-//			else {
+			if(!hasTraversed) {
+				
+//				explorer.update(this, navigator, delta, sensor);
+				keyCoordinates = keyFinder(currentView);
+			}
+			else {
 //				this.applyReverseAcceleration();
-//				System.out.println("Moving forward");
-//				navigator.update(delta, keyCoordinates);
-//			}
+				System.out.println("Moving forward");
+				navigator.update(delta, keyCoordinates);
+			}
 //			navigator.update(delta, keyCoordinates); 
 //			System.out.println("FOLLOWING COORDINATES NOW ");
 //		
@@ -177,7 +178,5 @@ public class MyAIController extends CarController{
 	public void setSensor(Sensor sensor) {
 		this.sensor = sensor;
 	}
-	
-	
 
 }

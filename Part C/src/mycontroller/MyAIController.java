@@ -49,9 +49,7 @@ public class MyAIController extends CarController{
 		this.explorer = new SimpleWallFollower();
 	}
 	
-	Coordinate initialGuess;
-	boolean notSouth = true;
-	
+
 	
 	@Override
 	public void update(float delta) {

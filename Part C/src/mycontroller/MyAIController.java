@@ -60,7 +60,7 @@ public class MyAIController extends CarController{
 	@Override
 	public void update(float delta) {
 		
-		sensor.update();
+		sensor.update(delta);
 		explorer.update(this, navigator, delta, sensor);
 
 		// Gets what the car can see

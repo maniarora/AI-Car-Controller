@@ -79,7 +79,7 @@ public class SimpleWallFollower extends Explorer{
 			// Try to determine whether or not the car is next to a wall.
 			else if(sensor.checkFollowingWall(controller.getOrientation())){
 				// Maintain some velocity
-				if(controller.getSpeed() < navigator.carSpeed){
+				if(controller.getSpeed() < navigator.getCarSpeed()){
 					controller.applyForwardAcceleration();
 				}
 				// If there is wall ahead, turn right!

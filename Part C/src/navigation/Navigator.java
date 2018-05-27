@@ -19,10 +19,11 @@ import world.WorldSpatial;
  * */
 public abstract class Navigator {
 	
-	public int EAST_THRESHOLD = 3;
-	public float MAX_CAR_SPEED;
+	public final int EAST_THRESHOLD = 3;
+	public final float MAX_CAR_SPEED = (float) 2;
 	public MyAIController controller;
-	public float carSpeed = 3;
+	private float carSpeed = 3;
+
 
 	
 
@@ -191,6 +192,9 @@ public abstract class Navigator {
 	
 	public float getCarSpeed() {
 		return this.carSpeed;
+	}
+	public void setCarSpeed(float carSpeed) {
+		this.carSpeed = carSpeed;
 	}
 
 }

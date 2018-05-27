@@ -59,24 +59,11 @@ public class MyAIController extends CarController{
 		
 		explorer.update(this, navigator, delta, sensor);
 
-//			// Gets what the car can see
-			HashMap<Coordinate, MapTile> currentView = getView();
-			ArrayList<Coordinate> keyCoordinates = new ArrayList<>();
-//			keyCoordinates.add(new Coordinate("19,2"));
-//			checkStateChange();
-//			
-//			if(!hasTraversed) {
-//				explorer.explore(delta, currentView);
-			keyCoordinates = keyFinder(currentView);
-//			}
-//			else {
-//				this.applyReverseAcceleration();
-//				System.out.println("Moving forward");
-//				navigator.update(delta, keyCoordinates);
-//			}
-//			navigator.update(delta, keyCoordinates); 
-//			System.out.println("FOLLOWING COORDINATES NOW ");
-//		
+		// Gets what the car can see
+		HashMap<Coordinate, MapTile> currentView = getView();
+		ArrayList<Coordinate> keyCoordinates = new ArrayList<>();
+		keyCoordinates = keyFinder(currentView);
+		
 		
 	}
 	
@@ -139,8 +126,6 @@ public class MyAIController extends CarController{
 		return coords;
 		
 	}
-
-	
 	/**
 	 * Checks whether the car's state has changed or not, stops turning if it
 	 *  already has.

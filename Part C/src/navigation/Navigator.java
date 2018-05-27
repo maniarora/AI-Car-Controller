@@ -3,6 +3,7 @@ package navigation;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import mycontroller.Move;
 import mycontroller.MyAIController;
 import tiles.MapTile;
 import utilities.Coordinate;
@@ -15,14 +16,16 @@ public abstract class Navigator {
 	public MyAIController controller;
 	public float carSpeed = 2.75f;
 	
+	
+	public abstract void moveCar(Move move, float delta);
+	public abstract void update(float delta, ArrayList<Coordinate> coordsToNavigate); 
+	 
 	/**
 	 * Readjust the car to the orientation we are in.
 	 * @param lastTurnDirection
 	 * @param delta
 	 */
-	public abstract void move( float delta);
-	public abstract void update(float delta, ArrayList<Coordinate> coordsToNavigate); 
-	
+
 	public void readjust(WorldSpatial.RelativeDirection lastTurnDirection, float delta) {
 		if(lastTurnDirection != null){
 			if(!controller.getSensor().isTurningRight() && lastTurnDirection.equals(WorldSpatial.RelativeDirection.RIGHT)){

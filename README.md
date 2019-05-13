@@ -6,8 +6,7 @@ This is the code for a two phase project for SWEN30006. The objective was to cre
 
 ## Simulation
 
-## ![simulation](https://github.com/maniarora/AI-Car-Controller/blob/master/images/simulation.gif)
-
+![simulation](https://github.com/maniarora/AI-Car-Controller/blob/master/images/simulation.gif)
 
 
 ## UML diagram for reference
